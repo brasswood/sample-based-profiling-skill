@@ -13,7 +13,7 @@ Use Samply to measure where a program spends its time.
 
 ## Important note on Windows
 
-**If you are on Windows, you must run Samply outside of the sandbox.** Samply requires elevation because it uses ETW. If you try to run it inside the sandbox, the UAC prompt will fail, then Samply will hang indefinitely instead of exiting with an error. If you are curious for more information/updates about this issue, see https://github.com/mstange/samply/issues/842.
+**If you are on Windows, you must run Samply outside of the sandbox.** Samply requires elevation because it uses ETW. If you run it inside the sandbox, the UAC prompt will fail, then Samply will hang indefinitely instead of exiting with an error. If you are curious for more information/updates about this issue, see https://github.com/mstange/samply/issues/842.
 
 ## Get a profile
 

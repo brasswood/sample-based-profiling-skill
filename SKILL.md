@@ -33,10 +33,12 @@ Prefer a self-contained symbolicated profile when the installed Samply supports
 samply record --presymbolicate --save-only -o <OUT_PROFILE.json.gz> -- <COMMAND_TO_PROFILE> <ARGS>
 ```
 
-Check `samply record --help` rather than assuming the flag is available. Older
-Samply versions may instead offer `--unstable-presymbolicate`, which writes a
-`.syms.json` sidecar rather than embedding symbols; preserve the sidecar with
-the profile.
+Check samply record --help rather than assuming the flag is available. Older
+Samply versions may offer --unstable-presymbolicate, which writes symbol
+information to a .syms.json sidecar rather than embedding it. Use this only
+when the profile must remain symbolizable without the matching binaries and
+debug files. Keep the sidecar alongside the profile and use `samply load` to
+serve its symbols; `profiler-cli` cannot read the sidecar directly.
 
 In Rust projects, if `cargo samply` is available:
 

@@ -1,7 +1,6 @@
 ---
 name: sample-based-profiling
 description: Analyze where a program spends time using Samply, a sampling CPU profiler. Use to find hot subroutines or to estimate the proportion of time spent in a given subroutine.
-compatibility: Works on Windows, Linux, and MacOS. Requires `samply` to be installed somewhere.
 license: Apache 2.0
 metadata:
     author: Andrew Riachi

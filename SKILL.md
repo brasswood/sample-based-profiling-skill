@@ -55,7 +55,7 @@ profiler-cli thread functions --json
 
 Discover the installed version and its help before relying on a command or output shape.
 
-If `profiler-cli` is not installed, ask for permission to install it before falling back to another method for reading profiles.
+If `profiler-cli` is not installed, run it through `npx`, install it globally, or fall back to another method for reading profiles.
 
 ## Symbolicate native frames
 

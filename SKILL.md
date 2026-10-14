@@ -103,6 +103,6 @@ calls, start Samply and run the CLI queries within the same long-lived shell.
 - Use the CLI when its hot-function table, call tree, filters, or JSON answer
   the question.
 - Inspect the profile format or seek another compatible analysis tool when the
-  CLI is unavailable or insufficient.
+  CLI is insufficient.
 - Record which artifact, commands, filters, and assumptions led to a
   conclusion, so another agent can reproduce or challenge it.

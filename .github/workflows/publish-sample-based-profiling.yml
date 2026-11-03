@@ -1,0 +1,37 @@
+name: Publish sample-based-profiling skill
+on:
+  push:
+    branches: [main]
+    paths: [SKILL.md, .github/workflows/publish-sample-based-profiling.yml]
+
+permissions: { contents: read }
+concurrency: { group: publish-sample-based-profiling, cancel-in-progress: false }
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install --global @ampcode/cli
+      - name: Publish for both accounts
+        env:
+          AMP_API_KEY_GMAIL: ${{ secrets.AMP_API_KEY_GMAIL }}
+          AMP_API_KEY_UTAH: ${{ secrets.AMP_API_KEY_UTAH }}
+        run: |
+          set -euo pipefail
+          : "${AMP_API_KEY_GMAIL:?Set AMP_API_KEY_GMAIL in repository secrets}"
+          : "${AMP_API_KEY_UTAH:?Set AMP_API_KEY_UTAH in repository secrets}"
+          publish() {
+            local key="$1" repo="$2"
+            AMP_API_KEY="$key" amp clone user-skills "$repo"
+            amp skill add --target "$repo" --name sample-based-profiling --overwrite "$GITHUB_WORKSPACE"
+            git -C "$repo" add sample-based-profiling
+            git -C "$repo" diff --cached --quiet && return 0
+            git -C "$repo" config user.name 'github-actions[bot]'
+            git -C "$repo" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git -C "$repo" commit -m 'Publish sample-based-profiling skill'
+            AMP_API_KEY="$key" git -C "$repo" push origin HEAD:main
+          }
+
+          publish "$AMP_API_KEY_GMAIL" "$RUNNER_TEMP/user-skills-gmail"
+          publish "$AMP_API_KEY_UTAH" "$RUNNER_TEMP/user-skills-utah"

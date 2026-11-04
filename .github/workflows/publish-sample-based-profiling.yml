@@ -28,7 +28,6 @@ jobs:
               *) echo 'Expected an Amp access token beginning with sgamp_' >&2; return 1 ;;
             esac
             export AMP_API_KEY="$key"
-            amp login
             amp clone user-skills "$repo"
             amp skill add --target "$repo" --name sample-based-profiling --overwrite "$GITHUB_WORKSPACE"
             git -C "$repo" add sample-based-profiling

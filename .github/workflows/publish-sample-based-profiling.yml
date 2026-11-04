@@ -23,14 +23,21 @@ jobs:
           : "${AMP_API_KEY_UTAH:?Set AMP_API_KEY_UTAH in repository secrets}"
           publish() {
             local key="$1" repo="$2"
-            AMP_API_KEY="$key" amp clone user-skills "$repo"
+            case "$key" in
+              sgamp_*) ;;
+              *) echo 'Expected an Amp access token beginning with sgamp_' >&2; return 1 ;;
+            esac
+            export AMP_API_KEY="$key"
+            amp login
+            amp clone user-skills "$repo"
             amp skill add --target "$repo" --name sample-based-profiling --overwrite "$GITHUB_WORKSPACE"
             git -C "$repo" add sample-based-profiling
-            git -C "$repo" diff --cached --quiet && return 0
+            git -C "$repo" diff --cached --quiet && { unset AMP_API_KEY; return 0; }
             git -C "$repo" config user.name 'github-actions[bot]'
             git -C "$repo" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git -C "$repo" commit -m 'Publish sample-based-profiling skill'
-            AMP_API_KEY="$key" git -C "$repo" push origin HEAD:main
+            git -C "$repo" push origin HEAD:main
+            unset AMP_API_KEY
           }
 
           publish "$AMP_API_KEY_GMAIL" "$RUNNER_TEMP/user-skills-gmail"

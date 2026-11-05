@@ -21,6 +21,20 @@ UAC prompt will fail, then Samply will hang indefinitely instead of exiting
 with an error. If you are curious for more information/updates about this
 issue, see https://github.com/mstange/samply/issues/842.
 
+## Important note on Amp orbs
+
+To use Samply in the orb, run `cargo install samply`. On Linux orbs, Samply requires `kernel.perf_event_paranoid` to be 1 or lower; if it is higher, temporarily lower it and restore the original value when recording exits:
+
+```sh
+original=$(cat /proc/sys/kernel/perf_event_paranoid)
+if [ "$original" -gt 1 ]; then
+    sudo sysctl -w kernel.perf_event_paranoid=1
+    trap 'sudo sysctl -w "kernel.perf_event_paranoid=$original"' EXIT
+fi
+samply record --save-only --no-open --output scratch/profile.json.gz -- \
+    command-to-profile
+```
+
 ## Get a profile
 
 ```powershell
